@@ -4,7 +4,9 @@ Cria capas de reels e carrosséis fiéis a uma marca, diretamente no telemóvel,
 
 Corre inteiramente no browser: **sem backend, sem conta, sem upload**. As fotos e os textos nunca saem do dispositivo. A única exceção é opcional: ao escolher uma fonte do Google Fonts (ver abaixo), a app faz um pedido ao Google.
 
-**Fontes e licenças:** a interface e a marca predefinida usam Besley e Anybody, ambas SIL OFL, autoalojadas em `fonts/` com as respetivas licenças.
+**Design system:** a interface usa os tokens do design system (`tokens.css`): tema Noite e Dia, anel de foco de 2 px, contrastes AA, botões com o efeito Registo, Light Chase no botão "Exportar imagem" e a Película (luz e grão) no ecrã vazio. Em *Criar o meu estilo → Aspeto da interface* escolhes o tema (Noite, Dia ou Sistema) e a fonte dos títulos (Besley ou Newsreader). Só muda a interface; as capas exportadas usam sempre o teu estilo.
+
+**Fontes e licenças:** Besley, Newsreader e Anybody, todas SIL OFL, autoalojadas em `fonts/` com as respetivas licenças.
 
 ## Como usar
 
@@ -40,6 +42,7 @@ Tudo em `localStorage`, neste dispositivo. As chaves têm nome próprio porque t
 |---|---|---|
 | Estilo (fontes e cores) | `postCreatorBrandKit` | Fontes guardadas dentro do próprio registo. Validado ao ler; o que for inválido volta à predefinição. |
 | Rascunho (textos e definições) | `postCreatorDraft` | Guardado automaticamente. **As fotos nunca são guardadas.** "Recomeçar" apaga-o. |
+| Aspeto da interface (tema, fonte dos títulos) | `postCreatorLook` | Aplicado já no arranque, sem flash. |
 
 Se o iOS descartar o separador, os textos voltam; as fotos têm de ser adicionadas de novo. O armazenamento do Safari e o da app instalada no ecrã principal podem ser separados: se configurares o estilo num e não aparecer no outro, usa exportar/importar.
 
@@ -90,8 +93,8 @@ node test_sw.js
 
 ```
 index.html   manifest.json   sw.js
-fonts/                (Besley, Anybody e licenças OFL)
-tokens-reference.css  (tokens do sistema de design)
+fonts/        (Besley, Newsreader, Anybody e licenças OFL)
+tokens.css    (tokens do design system v2.1, sem os itálicos)
 tests/
 icon-120.png  icon-152.png  icon-167.png  icon-180.png  icon-192.png  icon-512.png
 ```

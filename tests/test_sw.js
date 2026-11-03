@@ -71,8 +71,8 @@ process.on('unhandledRejection', (e) => { console.log('FAILED: unhandled rejecti
     await t.fire('install', {});
     const keys = [...t.stores.keys()];
     ok(keys.length === 1 && keys[0] === 'post-creator', 'install: one cache, named post-creator (' + keys + ')');
-    ok(t.stores.get('post-creator').size === 11, 'install: precaches the 11 app files (' + t.stores.get('post-creator').size + ')');
-    ok(t.net.calls.length === 11, 'install: fetches each file once (' + t.net.calls.length + ')');
+    ok(t.stores.get('post-creator').size === 13, 'install: precaches the 13 app files (' + t.stores.get('post-creator').size + ')');
+    ok(t.net.calls.length === 13, 'install: fetches each file once (' + t.net.calls.length + ')');
     ok(t.net.calls.every((c) => c.req && c.req.cache === 'reload'), 'install: bypasses the browser HTTP cache (cache: reload)');
     ok(t.flags.skipWaiting === 1, 'install: skipWaiting');
   }

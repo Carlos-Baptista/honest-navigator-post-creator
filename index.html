@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-PT" data-theme="night">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Honest Navigator Post Creator</title>
 
 <link rel="manifest" href="manifest.json">
@@ -18,56 +18,28 @@
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <link rel="icon" type="image/png" href="icon-180.png">
 
+<script>
+/* Aparência guardada (tema e fonte dos títulos): aplicada antes de pintar, sem flash. */
+(function(){try{var a=JSON.parse(localStorage.getItem('postCreatorLook')||'null')||{},r=document.documentElement;
+if(a.theme==='day')r.setAttribute('data-theme','day');else if(a.theme==='system')r.removeAttribute('data-theme');
+if(a.display==='newsreader')r.setAttribute('data-display','newsreader');}catch(e){}})();
+</script>
+<link rel="stylesheet" href="tokens.css">
+
 <style>
-/* The interface always uses the Honest Navigator fonts (UIHeading/UIBody), so it stays
-   legible whatever font the user picks. Each person's brand (BrandHeading/BrandBody,
+/* The interface always uses the design system fonts (Besley/Newsreader and Anybody, in tokens.css),
+   so it stays legible whatever font the user picks. Each person's brand (BrandHeading/BrandBody,
    loaded by the script) only applies to the exported content and the preview. */
-@font-face {
-  font-family: 'UIHeading';
-  src: url('fonts/besley-latin-wght-normal.woff2') format('woff2');
-  font-weight: 400 900;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'UIBody';
-  src: url('fonts/anybody-latin-wdth-normal.woff2') format('woff2');
-  font-weight: 100 900;
-  font-stretch: 50% 150%;
-  font-display: swap;
-}
-
-:root{
-  --color-bg:           #1C1B17;
-  --color-bg-surface:   #222018;
-  --color-text-strong:  #EDE5D8;
-  --color-text-base:    #C4B49A;
-  --color-text-mid:     #988A79;   /* v2: AA nos 3 fundos */
-  --color-orange:       #C8601A;   /* só gráfico / decorativo */
-  --color-orange-text:  #D87030;   /* laranja em texto, AA */
-  --color-orange-fill:  #AD4718;   /* fundo de botão, etiqueta AA */
-  --color-focus:        #EDE5D8;
-  --color-border-ui:    #7C6E63;
-  --color-sage:         #909C78;
-  --color-amber:        #C8A040;
-  --color-forest:       #1E2818;
-  --color-dim:          #5A5048;
-  --color-faint:        #3A3530;
-  --color-border:       rgba(200,186,168,0.08);
-  --color-border-mid:   rgba(200,186,168,0.14);
-  --tracking-wide:  0.06em;
-  --tracking-wider: 0.10em;
-  --tracking-widest:0.14em;
-}
-
+/* Cores, tipografia, espaçamento, foco e movimento vêm de tokens.css (design system). */
 *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
-:focus-visible{ outline:2px solid var(--color-focus); outline-offset:0; }
+button,input,textarea{ font-family:inherit; }
 
 html,body{
   margin:0;
   padding:0;
   background:var(--color-bg);
   color:var(--color-text-base);
-  font-family:'UIBody', sans-serif;
+  font-family:var(--font-ui);
   font-weight:300;
   min-height:100vh;
 }
@@ -84,10 +56,12 @@ html,body{
 }
 
 .masthead h1{
-  font-family:'UIHeading', serif;
-  font-weight:500;
-  font-size:28px;
-  letter-spacing:0.2px;
+  font-family:var(--font-display);
+  font-weight:var(--display-weight);
+  font-size:26px;
+  letter-spacing:var(--display-tracking);
+  line-height:var(--display-leading);
+  font-optical-sizing:auto;
   margin:0 0 4px;
   color:var(--color-text-strong);
 }
@@ -112,11 +86,11 @@ html,body{
 .brand-kit-btn{
   flex-shrink:0;
   background:transparent;
-  border:0.5px solid var(--color-border-mid);
+  border:var(--border-ui) solid var(--color-border-ui);
   color:var(--color-text-mid);
-  font-family:'UIBody',sans-serif;
-  font-size:10px;
-  font-weight:400;
+  font-family:var(--font-ui);
+  font-size:var(--text-xs);
+  font-weight:var(--weight-medium);
   letter-spacing:var(--tracking-wide);
   text-transform:uppercase;
   padding:8px 10px;
@@ -134,6 +108,10 @@ html,body{
 
 .brand-panel .back-link{
   display:inline-block;
+  background:none;
+  border:0;
+  padding:0;
+  cursor:pointer;
   color:var(--color-text-mid);
   font-size:11px;
   letter-spacing:var(--tracking-wide);
@@ -142,8 +120,11 @@ html,body{
 }
 
 .brand-panel h2{
-  font-family:'UIHeading', serif;
-  font-weight:500;
+  font-family:var(--font-display);
+  font-weight:var(--display-weight);
+  letter-spacing:var(--display-tracking);
+  line-height:var(--display-leading);
+  font-optical-sizing:auto;
   font-size:24px;
   color:var(--color-text-strong);
   margin:0 0 6px;
@@ -161,7 +142,7 @@ html,body{
   font-size:11px;
   letter-spacing:var(--tracking-widest);
   text-transform:uppercase;
-  color:var(--color-dim);
+  color:var(--color-text-mid);
   border-bottom:0.5px solid var(--color-border-mid);
   padding-bottom:10px;
   margin:32px 0 20px;
@@ -172,7 +153,7 @@ html,body{
   align-items:center;
   justify-content:space-between;
   gap:12px;
-  border:0.5px solid var(--color-faint);
+  border:var(--border-hairline) solid var(--color-border-mid);
   padding:12px;
   margin-bottom:14px;
 }
@@ -188,7 +169,7 @@ html,body{
   font-size:10px;
   letter-spacing:var(--tracking-wide);
   text-transform:uppercase;
-  color:var(--color-dim);
+  color:var(--color-text-mid);
   margin-bottom:3px;
 }
 .font-upload-row .fu-btns{ display:flex; gap:6px; flex-shrink:0; }
@@ -196,10 +177,10 @@ html,body{
 .font-upload-row button{
   flex-shrink:0;
   background:transparent;
-  border:0.5px solid var(--color-border-mid);
+  border:var(--border-ui) solid var(--color-border-ui);
   color:var(--color-text-mid);
-  font-family:'UIBody',sans-serif;
-  font-size:10px;
+  font-family:var(--font-ui);
+  font-size:var(--text-xs);
   letter-spacing:var(--tracking-wide);
   text-transform:uppercase;
   padding:8px 10px;
@@ -215,10 +196,13 @@ html,body{
   width:40px;
   height:40px;
   padding:0;
-  border:0.5px solid var(--color-border-mid);
+  border:var(--border-ui) solid var(--color-border-ui);
   background:none;
   flex-shrink:0;
 }
+.color-row input[type=color]::-webkit-color-swatch-wrapper{ padding:0; }
+.color-row input[type=color]::-webkit-color-swatch{ border:0; }
+.color-row input[type=color]::-moz-color-swatch{ border:0; }
 .color-row .cr-text{ flex:1; min-width:0; }
 .color-row .cr-role{
   display:block;
@@ -229,7 +213,7 @@ html,body{
 .color-row .cr-desc{
   display:block;
   font-size:10.5px;
-  color:var(--color-dim);
+  color:var(--color-text-mid);
 }
 .color-row .cr-hex{
   font-size:10px;
@@ -251,7 +235,7 @@ html,body{
   margin:0 auto;
   aspect-ratio:9/16;
   background:
-    repeating-conic-gradient(rgba(200,186,168,0.04) 0% 25%, transparent 0% 50%) 50% / 24px 24px,
+    repeating-conic-gradient(color-mix(in srgb, var(--color-text-strong) 4%, transparent) 0% 25%, transparent 0% 50%) 50% / 24px 24px,
     var(--color-bg-surface);
   overflow:hidden;
   border:0.5px solid var(--color-border-mid);
@@ -265,22 +249,39 @@ html,body{
 }
 
 .empty-state{
+  /* Película (design system): luz, grão e profundidade. É sempre escura, por isso
+     redefine localmente os tokens de texto para os valores de Noite. O texto fica acima da zona de luz. */
+  --color-text-base:   var(--stone-300);
+  --color-text-mid:    var(--stone-400);
+  --color-border-ui:   #7C6E63;
   position:absolute;
   inset:0;
+  isolation:isolate;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:12px;
   text-align:center;
-  padding:0 40px;
+  padding:0 40px 34%;
+  background:var(--gradient-film);
+  box-shadow:var(--edge-light);
   pointer-events:none;
 }
+.empty-state::after{
+  content:"";
+  position:absolute; inset:0; z-index:0;
+  background-image:var(--grain-image);
+  background-size:220px;
+  opacity:var(--grain-opacity);
+  mix-blend-mode:var(--grain-blend);
+}
+.empty-state > *{ position:relative; z-index:1; }
 
 .empty-state .glyph{
   width:32px;
   height:32px;
-  box-shadow:inset 0 0 0 1px var(--color-dim);
+  box-shadow:inset 0 0 0 1px var(--color-border-ui);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -292,7 +293,7 @@ html,body{
   font-size:11px;
   letter-spacing:var(--tracking-wide);
   text-transform:uppercase;
-  color:var(--color-text-mid);
+  color:var(--color-text-base);
   line-height:1.6;
 }
 
@@ -318,15 +319,15 @@ html,body{
   margin-top:12px;
   padding:13px;
   background:transparent;
-  border:0.5px solid var(--color-border-mid);
+  border:var(--border-ui) solid var(--color-border-ui);
   color:var(--color-text-mid);
-  font-family:'UIBody',sans-serif;
+  font-family:var(--font-ui);
   font-size:11px;
-  font-weight:400;
+  font-weight:var(--weight-medium);
   letter-spacing:var(--tracking-wider);
   text-transform:uppercase;
   text-align:center;
-  transition:color 0.2s;
+  
 }
 .upload-btn:active{ color:var(--color-text-strong); }
 
@@ -338,7 +339,7 @@ html,body{
   font-size:10px;
   letter-spacing:var(--tracking-wide);
   text-transform:uppercase;
-  color:var(--color-dim);
+  color:var(--color-text-mid);
   margin-top:10px;
   padding:0 2px;
 }
@@ -370,18 +371,18 @@ html,body{
   margin-top:10px;
   padding:9px;
   background:transparent;
-  border:0.5px solid var(--color-border-mid);
-  color:var(--color-dim);
-  font-family:'UIBody',sans-serif;
-  font-size:10px;
-  font-weight:400;
+  border:var(--border-ui) solid var(--color-border-ui);
+  color:var(--color-text-mid);
+  font-family:var(--font-ui);
+  font-size:var(--text-xs);
+  font-weight:var(--weight-medium);
   letter-spacing:var(--tracking-wide);
   text-transform:uppercase;
   text-align:center;
 }
 .safe-zone-btn.on{
-  color:rgba(255,99,71,0.9);
-  border-color:rgba(255,99,71,0.4);
+  color:var(--color-orange-text);
+  border-color:var(--color-orange-text);
 }
 
 .panel{
@@ -394,7 +395,7 @@ html,body{
 
 .field label{
   display:block;
-  font-size:10px;
+  font-size:var(--text-xs);
   font-weight:400;
   letter-spacing:var(--tracking-widest);
   text-transform:uppercase;
@@ -411,7 +412,7 @@ html,body{
 .gf-row{ align-items:flex-start; }
 .gf-field{ flex:1; min-width:0; }
 .gf-suggest{
-  border:0.5px solid var(--color-faint);
+  border:var(--border-ui) solid var(--color-border-ui);
   border-top:0;
   background:var(--color-bg-surface);
 }
@@ -423,7 +424,7 @@ html,body{
   border:0;
   border-top:0.5px solid var(--color-border);
   color:var(--color-text-base);
-  font-family:'UIBody',sans-serif;
+  font-family:var(--font-ui);
   font-size:14px;
   letter-spacing:0;
   text-transform:none;
@@ -433,23 +434,23 @@ html,body{
   width:100%;
   min-width:0;
   background:transparent;
-  border:0.5px solid var(--color-faint);
+  border:var(--border-ui) solid var(--color-border-ui);
   color:var(--color-text-strong);
-  font-family:'UIBody',sans-serif;
+  font-family:var(--font-ui);
   font-weight:300;
-  font-size:15px;
+  font-size:var(--text-input);
   padding:9px 12px;
   border-radius:0;
 }
-.gf-row input::placeholder{ color:var(--color-dim); }
+.gf-row input::placeholder{ color:var(--color-text-mid); opacity:1; }
 .gf-row input:focus{ outline:2px solid var(--color-focus); outline-offset:0; border-color:var(--color-focus); }
 .gf-row button{
   flex-shrink:0;
   background:transparent;
-  border:0.5px solid var(--color-border-mid);
+  border:var(--border-ui) solid var(--color-border-ui);
   color:var(--color-text-base);
-  font-family:'UIBody',sans-serif;
-  font-size:10px;
+  font-family:var(--font-ui);
+  font-size:var(--text-xs);
   letter-spacing:var(--tracking-wide);
   text-transform:uppercase;
   padding:8px 12px;
@@ -463,11 +464,11 @@ html,body{
 .field textarea{
   width:100%;
   background:transparent;
-  border:0.5px solid var(--color-faint);
+  border:var(--border-ui) solid var(--color-border-ui);
   color:var(--color-text-strong);
-  font-family:'UIBody',sans-serif;
+  font-family:var(--font-ui);
   font-weight:300;
-  font-size:15px;
+  font-size:var(--text-input);
   padding:11px 12px;
 }
 .field textarea{
@@ -475,7 +476,7 @@ html,body{
   line-height:1.4;
 }
 .field input[type=text]::placeholder,
-.field textarea::placeholder{ color:var(--color-dim); }
+.field textarea::placeholder{ color:var(--color-text-mid); opacity:1; }
 .field input[type=text]:focus,
 .field textarea:focus{ outline:2px solid var(--color-focus); outline-offset:0; border-color:var(--color-focus); }
 
@@ -492,12 +493,12 @@ html,body{
 .field input[type=range]:focus-visible::-moz-range-thumb{ outline:2px solid var(--color-focus); outline-offset:2px; }
 .field input[type=range]::-webkit-slider-runnable-track{
   height:2px;
-  background:var(--color-dim);
+  background:var(--color-border-ui);
   border:none;
 }
 .field input[type=range]::-moz-range-track{
   height:2px;
-  background:var(--color-dim);
+  background:var(--color-border-ui);
   border:none;
 }
 .field input[type=range]::-webkit-slider-thumb{
@@ -534,8 +535,10 @@ html,body{
 .swatch{
   width:32px;
   height:32px;
-  border:0.5px solid var(--color-border-mid);
+  border:var(--border-ui) solid var(--color-border-ui);
   position:relative;
+  padding:0;
+  cursor:pointer;
 }
 .swatch.active::after{
   content:'';
@@ -555,10 +558,10 @@ html,body{
   display:flex;
   align-items:center;
   justify-content:center;
-  border:0.5px solid var(--color-border-mid);
+  border:var(--border-ui) solid var(--color-border-ui);
   background:transparent;
   color:var(--color-text-mid);
-  font-family:'UIBody',sans-serif;
+  font-family:var(--font-ui);
   font-size:11px;
   font-weight:400;
 }
@@ -567,7 +570,7 @@ html,body{
   color:var(--color-text-strong);
 }
 .page-tab.add{
-  color:var(--color-dim);
+  color:var(--color-text-mid);
   font-size:16px;
 }
 
@@ -583,15 +586,16 @@ html,body{
   border:none;
   padding:0;
   color:var(--color-text-mid);
-  font-family:'UIBody',sans-serif;
+  cursor:pointer;
+  font-family:var(--font-ui);
   font-size:11px;
   font-weight:400;
   letter-spacing:var(--tracking-wider);
   text-transform:uppercase;
 }
 .tab-bar button.active{ color:var(--color-text-strong); }
-.tab-bar button.active::before{ content:'[ '; color:var(--color-dim); }
-.tab-bar button.active::after{ content:' ]'; color:var(--color-dim); }
+.tab-bar button.active::before{ content:'[\00a0' / ''; color:var(--color-text-mid); }
+.tab-bar button.active::after{ content:'\00a0]' / ''; color:var(--color-text-mid); }
 
 .tab-panel .pos-grid{ max-width:132px; margin:0 auto; }
 
@@ -607,16 +611,17 @@ html,body{
   content:'';
   position:absolute;
   inset:0;
-  box-shadow:inset 0 0 0 1px var(--color-border-mid);
+  box-shadow:inset 0 0 0 1px var(--color-border-ui);
   pointer-events:none;
 }
 .pos-grid button{
   background:transparent;
   border:none;
-  border-right:0.5px solid var(--color-border-mid);
-  border-bottom:0.5px solid var(--color-border-mid);
+  border-right:0.5px solid var(--color-border-ui);
+  border-bottom:0.5px solid var(--color-border-ui);
   position:relative;
   padding:0;
+  cursor:pointer;
 }
 .pos-grid button:nth-child(3n){ border-right:none; }
 .pos-grid button:nth-child(n+7){ border-bottom:none; }
@@ -633,7 +638,7 @@ html,body{
 
 .segmented{
   display:flex;
-  border:0.5px solid var(--color-border-mid);
+  border:var(--border-ui) solid var(--color-border-ui);
 }
 .segmented button{
   flex:1;
@@ -641,13 +646,13 @@ html,body{
   background:transparent;
   border:none;
   color:var(--color-text-mid);
-  font-family:'UIBody',sans-serif;
+  font-family:var(--font-ui);
   font-size:10.5px;
   font-weight:400;
   letter-spacing:var(--tracking-wider);
   text-transform:uppercase;
-  border-right:0.5px solid var(--color-border-mid);
-  transition:color 0.2s;
+  border-right:var(--border-ui) solid var(--color-border-ui);
+  cursor:pointer;transition:color var(--duration-fast);
 }
 .segmented button:last-child{ border-right:none; }
 .segmented button.active{
@@ -679,22 +684,29 @@ html,body{
 
 .export-btn{
   display:block;
-  width:calc(100% - 40px);
-  margin:32px 20px 0;
+  width:100%;
   height:52px;
   padding:0;
   background:var(--color-orange-fill);
-  border:1px solid var(--color-orange);
-  color:var(--color-text-strong);
-  font-family:'UIBody', sans-serif;
-  font-weight:400;
-  font-size:12px;
+  border:var(--border-ui) solid var(--color-orange);
+  color:var(--color-on-fill);
+  font-family:var(--font-ui);
+  font-weight:var(--weight-medium);
+  font-size:var(--text-sm);
   letter-spacing:var(--tracking-widest);
   text-transform:uppercase;
-  transition:box-shadow 0.2s;
+  cursor:pointer;
 }
-.export-btn:active{ box-shadow:0 0 18px rgba(200,96,26,0.3); }
-.export-btn:disabled{ background:rgba(200,96,26,0.25); border-color:transparent; color:var(--color-dim); }
+/* Botão principal: envolvido em .lw (Light Chase). A luz percorre o perímetro uma vez. */
+.export-wrap{ display:block; margin:32px 20px 0; }
+.export-btn.secondary{
+  width:calc(100% - 40px);
+  margin:12px 20px 0;
+  background:transparent;
+  color:var(--color-text-base);
+  border-color:var(--color-border-ui);
+}
+.export-btn:disabled{ background:transparent; border-color:var(--color-border-mid); color:var(--color-text-mid); cursor:default; opacity:.7; }
 
 /* Update banner: fixed at the top (the toast lives at the bottom), so both can show at once. */
 .update-banner{
@@ -721,17 +733,17 @@ html,body{
 .update-actions{ display:flex; gap:8px; flex:none; }
 .update-actions button{
   font:inherit;
+  font-weight:var(--weight-medium);
   letter-spacing:inherit;
   text-transform:inherit;
   padding:8px 12px;
-  border:0;
+  border:var(--border-ui) solid var(--color-border-ui);
   border-radius:0;
   cursor:pointer;
   background:transparent;
   color:var(--color-text-base);
-  box-shadow:inset 0 0 0 1px var(--color-border-mid);
 }
-.update-actions #updateBtn{ background:var(--color-orange-fill); color:var(--color-text-strong); box-shadow:none; }
+.update-actions #updateBtn{ background:var(--color-orange-fill); color:var(--color-on-fill); border-color:var(--color-orange); }
 .app-version{
   text-align:center;
   margin-top:24px;
@@ -743,35 +755,73 @@ html,body{
 
 .reset-link{
   display:block;
+  width:100%;
+  background:none;
+  border:0;
+  padding:0;
+  cursor:pointer;
   text-align:center;
   margin-top:16px;
   font-size:10px;
   letter-spacing:var(--tracking-wide);
   text-transform:uppercase;
-  color:var(--color-dim);
+  color:var(--color-text-mid);
   text-decoration:underline;
   text-underline-offset:2px;
 }
+/* Registo: no hover, o botão desloca-se 3px e ganha sombra dura; :active volta ao sítio. */
+.brand-kit-btn,.upload-btn,.safe-zone-btn,.font-upload-row button,.gf-row button,.update-actions button,.export-btn{
+  transition:transform var(--duration-reg) var(--ease-standard), box-shadow var(--duration-reg) var(--ease-standard), color var(--duration-reg), border-color var(--duration-reg);
+}
 @media (hover:hover) and (pointer:fine) {
-  .upload-btn:hover{ color:var(--color-text-strong); border-color:var(--color-text-mid); }
-  .segmented button:not(.active):hover{ color:var(--color-text-base); }
-  .page-tab:not(.active):hover{ color:var(--color-text-strong); border-color:var(--color-text-mid); }
-  .pos-grid button:not(.active):hover{ background:rgba(200,186,168,0.08); }
-  .tab-bar button:not(.active):hover{ color:var(--color-text-base); }
-  .brand-kit-btn:hover{ color:var(--color-text-strong); border-color:var(--color-text-mid); }
-  .safe-zone-btn:not(.on):hover{ color:var(--color-text-base); border-color:var(--color-text-mid); }
+  .brand-kit-btn:hover,.upload-btn:hover,.safe-zone-btn:hover,.font-upload-row button:hover,.gf-row button:hover,.update-actions button:hover,.export-btn.secondary:hover{
+    transform:translate(calc(var(--reg-offset) * -1), calc(var(--reg-offset) * -1));
+    box-shadow:var(--reg-offset) var(--reg-offset) 0 var(--reg-shadow-ghost);
+    color:var(--color-text-strong);
+    border-color:var(--color-orange-text);
+  }
+  .export-btn:not(.secondary):not(:disabled):hover,.update-actions #updateBtn:hover{
+    transform:translate(calc(var(--reg-offset) * -1), calc(var(--reg-offset) * -1));
+    box-shadow:var(--reg-offset) var(--reg-offset) 0 var(--reg-shadow-primary);
+    color:var(--color-on-fill);
+    border-color:var(--color-orange);
+  }
+  .lw .export-btn:not(.secondary):not(:disabled):hover{ transform:none; box-shadow:none; }
+  .segmented button:not(.active):hover{ color:var(--color-text-strong); }
+  .page-tab:not(.active):hover{ color:var(--color-text-strong); border-color:var(--color-border-ui-hover); }
+  .pos-grid button:not(.active):hover{ background:color-mix(in srgb, var(--color-text-strong) 8%, transparent); }
+  .tab-bar button:not(.active):hover{ color:var(--color-text-strong); }
   .brand-panel .back-link:hover{ color:var(--color-text-strong); }
-  .font-upload-row button:hover{ color:var(--color-text-strong); border-color:var(--color-text-mid); }
-  .gf-row button:hover{ color:var(--color-text-strong); border-color:var(--color-text-mid); }
-  .gf-row input:hover{ border-color:var(--color-dim); }
-  .gf-suggest button:hover{ background:rgba(200,186,168,0.08); color:var(--color-text-strong); }
-  .swatch:hover{ border-color:var(--color-text-mid); }
-  .export-btn:not(:disabled):hover{ box-shadow:0 0 18px rgba(200,96,26,0.3), 0 0 36px rgba(200,96,26,0.1); }
-  #exportAllBtn:not(:disabled):hover{ box-shadow:0 0 14px rgba(200,96,26,0.2); background:rgba(200,96,26,0.08); }
-  .reset-link:hover{ color:var(--color-text-base); }
+  .gf-row input:hover{ border-color:var(--color-border-ui-hover); }
+  .gf-suggest button:hover{ background:color-mix(in srgb, var(--color-text-strong) 8%, transparent); color:var(--color-text-strong); }
+  .swatch:hover{ border-color:var(--color-border-ui-hover); }
+  .reset-link:hover{ color:var(--color-text-strong); }
   .checkbox-row:hover span{ color:var(--color-text-strong); }
   .field input[type=text]:hover,
-  .field textarea:hover{ border-color:var(--color-dim); }
+  .field textarea:hover{ border-color:var(--color-border-ui-hover); }
+}
+.brand-kit-btn:active,.upload-btn:active,.safe-zone-btn:active,.font-upload-row button:active,.gf-row button:active,.update-actions button:active,.export-btn:active{ transform:none; box-shadow:none; }
+
+/* Light Chase (botão principal): rect com pathLength=100, traço 12/88. */
+.lw{ position:relative; }
+.chase{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; filter:var(--chase-glow-primary); }
+.chase rect{ fill:none; stroke:var(--color-text-strong); stroke-width:1.5; stroke-linecap:round; stroke-dasharray:12 88; stroke-dashoffset:0; opacity:0; }
+@keyframes chase{ 0%{ stroke-dashoffset:0; opacity:0 } 8%{ opacity:1 } 88%{ opacity:1 } 100%{ stroke-dashoffset:-100; opacity:0 } }
+.lw:active rect,.lw:has(.export-btn:focus-visible) rect,.lw.chase-once rect{ animation:chase var(--duration-chase) var(--ease-standard) 1 forwards; }
+@media (hover:hover) { .lw:hover rect{ animation:chase var(--duration-chase) var(--ease-standard) 1 forwards; } }
+.lw:has(.export-btn:disabled) rect{ animation:none !important; opacity:0; }
+
+/* Toque: alvos de 44px (design system, --target-min). */
+@media (pointer:coarse) {
+  .brand-kit-btn,.font-upload-row button,.gf-row button,.safe-zone-btn,.upload-btn,.update-actions button,.segmented button,.tab-bar button,.reset-link,.brand-panel .back-link{ min-height:var(--target-min); }
+  .tab-bar button,.brand-panel .back-link{ display:inline-flex; align-items:center; }
+  .reset-link{ display:flex; align-items:center; justify-content:center; }
+  .brand-links .reset-link{ display:inline-flex; }
+  .page-tab,.swatch{ width:var(--target-min); height:var(--target-min); }
+  .swatches{ gap:8px; }
+  .page-tabs{ gap:8px; }
+  .gf-suggest button{ min-height:var(--target-min); }
+  .checkbox-row input{ width:24px; height:24px; }
 }
 
 .brand-preview{
@@ -803,7 +853,7 @@ html,body{
 .brand-note{
   font-size:11px;
   line-height:1.5;
-  color:var(--color-dim);
+  color:var(--color-text-mid);
   margin:20px 0 0;
 }
 .brand-links{
@@ -812,7 +862,7 @@ html,body{
   gap:22px;
   margin-top:18px;
 }
-.brand-links .reset-link{ margin-top:0; }
+.brand-links .reset-link{ margin-top:0; width:auto; }
 
 .toast{
   position:fixed;
@@ -832,8 +882,8 @@ html,body{
   line-height:1.5;
 }
 .toast.err{
-  color:var(--color-orange-text);
-  box-shadow:inset 0 0 0 1px rgba(200,96,26,0.6);
+  color:var(--color-error);
+  box-shadow:inset 0 0 0 1px var(--color-error);
 }
 </style>
 </head>
@@ -843,7 +893,7 @@ html,body{
   <div class="masthead">
     <div class="masthead-row">
       <div>
-        <h1>Honest Navigator Post Creator</h1>
+        <h1>Honest Navigator</h1>
         <p>Cria posts fiéis à marca, sem precisar de saber design.</p>
       </div>
       <button class="brand-kit-btn" id="openBrandPanel">Criar o meu estilo</button>
@@ -851,7 +901,7 @@ html,body{
   </div>
 
   <div class="brand-panel section-hidden" id="brandPanel">
-    <a class="back-link" id="closeBrandPanel">‹ Voltar ao editor</a>
+    <button type="button" class="back-link" id="closeBrandPanel">‹ Voltar ao editor</button>
     <h2>A tua identidade. As tuas fotos. O teu telemóvel.</h2>
     <p class="tagline">Dá-me a tua identidade — 2 fontes e 5 cores. Eu trato de manter as tuas capas sempre consistentes com ela.</p>
 
@@ -948,11 +998,29 @@ html,body{
     <p class="brand-note">Guardar recarrega a app: os textos mantêm-se, mas as fotos já carregadas têm de ser adicionadas de novo. Tudo fica neste dispositivo.</p>
     <button class="export-btn" id="saveBrandBtn" style="margin:20px 0 0;width:100%;">Guardar e aplicar</button>
     <div class="brand-links">
-      <a class="reset-link" id="exportBrandBtn">exportar estilo</a>
-      <a class="reset-link" id="importBrandBtn">importar estilo</a>
+      <button type="button" class="reset-link" id="exportBrandBtn">exportar estilo</button>
+      <button type="button" class="reset-link" id="importBrandBtn">importar estilo</button>
     </div>
     <input type="file" id="importBrandInput" accept=".json,application/json,text/plain" style="display:none;">
-    <a class="reset-link" id="resetBrandBtn">repor Honest Navigator (predefinição)</a>
+    <button type="button" class="reset-link" id="resetBrandBtn">repor Honest Navigator (predefinição)</button>
+
+    <div class="section-label">Aspeto da interface</div>
+    <div class="field">
+      <label id="lblTheme">Tema</label>
+      <div class="segmented" id="themeSeg" role="group" aria-labelledby="lblTheme">
+        <button type="button" data-look="night">Noite</button>
+        <button type="button" data-look="day">Dia</button>
+        <button type="button" data-look="system">Sistema</button>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:0;">
+      <label id="lblDisplay">Fonte dos títulos</label>
+      <div class="segmented" id="displaySeg" role="group" aria-labelledby="lblDisplay">
+        <button type="button" data-look="besley">Besley</button>
+        <button type="button" data-look="newsreader">Newsreader</button>
+      </div>
+    </div>
+    <p class="brand-note">Só muda a interface do editor, de imediato. As capas exportadas usam sempre o teu estilo (fontes e cores acima).</p>
   </div>
 
   <div class="panel" style="padding-bottom:4px;">
@@ -1006,7 +1074,7 @@ html,body{
     <div class="field section-hidden" id="pagesField">
       <label>Páginas</label>
       <div class="page-tabs" id="pageTabs"></div>
-      <a class="reset-link" id="removePageLink" style="text-align:left;margin-top:10px;">remover esta página</a>
+      <button type="button" class="reset-link" id="removePageLink" style="text-align:left;margin-top:10px;">remover esta página</button>
     </div>
 
     <div class="tab-bar" id="tabBar">
@@ -1115,9 +1183,9 @@ html,body{
     </div>
   </div>
 
-  <button class="export-btn" id="exportBtn" disabled>Exportar imagem</button>
-  <button class="export-btn section-hidden" id="exportAllBtn" style="background:transparent;color:var(--color-orange-text);border-color:rgba(200,96,26,0.5);margin-top:12px;">Exportar todas as páginas</button>
-  <a class="reset-link" id="resetLink">recomeçar</a>
+  <span class="lw lw-p export-wrap"><button class="export-btn" id="exportBtn" disabled>Exportar imagem</button><svg class="chase" aria-hidden="true" focusable="false"><rect x="0" y="0" width="100%" height="100%" pathLength="100"/></svg></span>
+  <button class="export-btn secondary section-hidden" id="exportAllBtn">Exportar todas as páginas</button>
+  <button type="button" class="reset-link" id="resetLink">recomeçar</button>
   <p class="app-version" id="appVersion"></p>
 </div>
 
@@ -1670,10 +1738,13 @@ removePageLink.addEventListener('click', () => {
 
 let grainPattern = null;
 
+const SWATCH_NAMES = { base:'Base', text:'Texto', accent:'Acento', secondary:'Secundária', light:'Clara', white:'Branco', black:'Preto' };
 function buildSwatchRow(container, palette, activeIdx, onPick) {
   container.innerHTML = '';
   palette.forEach((c, i) => {
-    const el = document.createElement('div');
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.setAttribute('aria-label', SWATCH_NAMES[c.name] || c.hex);
     el.className = 'swatch' + (i === activeIdx ? ' active' : '');
     el.style.background = c.hex;
     if (c.hex.toLowerCase() === '#ede5d8') el.style.boxShadow = 'inset 0 0 0 1px rgba(28,27,23,0.25)';
@@ -2785,6 +2856,75 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') checkForUpdate();
 });
 setTimeout(checkForUpdate, 3000);
+
+// ---------- Aparência da interface (design system: tema Noite/Dia e fonte dos títulos) ----------
+const LOOK_KEY = 'postCreatorLook';
+const THEME_COLORS = { night:'#1C1B17', day:'#EFE9DD' };
+function readLook() {
+  try {
+    const v = JSON.parse(localStorage.getItem(LOOK_KEY) || 'null') || {};
+    return { theme: ['night','day','system'].includes(v.theme) ? v.theme : 'night', display: v.display === 'newsreader' ? 'newsreader' : 'besley' };
+  } catch (e) { return { theme:'night', display:'besley' }; }
+}
+function applyLook(look) {
+  const root = document.documentElement;
+  if (look.theme === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', look.theme);
+  if (look.display === 'newsreader') root.setAttribute('data-display', 'newsreader'); else root.removeAttribute('data-display');
+  const light = look.theme === 'day' || (look.theme === 'system' && window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', light ? THEME_COLORS.day : THEME_COLORS.night);
+  document.querySelectorAll('#themeSeg button').forEach((b) => b.classList.toggle('active', b.dataset.look === look.theme));
+  document.querySelectorAll('#displaySeg button').forEach((b) => b.classList.toggle('active', b.dataset.look === look.display));
+}
+let currentLook = readLook();
+applyLook(currentLook);
+function saveLook(patch) {
+  currentLook = Object.assign({}, currentLook, patch);
+  try { localStorage.setItem(LOOK_KEY, JSON.stringify(currentLook)); } catch (e) { /* sem armazenamento: só nesta sessão */ }
+  applyLook(currentLook);
+}
+document.querySelectorAll('#themeSeg button').forEach((b) => b.addEventListener('click', () => saveLook({ theme: b.dataset.look })));
+document.querySelectorAll('#displaySeg button').forEach((b) => b.addEventListener('click', () => saveLook({ display: b.dataset.look })));
+if (window.matchMedia) {
+  const mq = matchMedia('(prefers-color-scheme: light)');
+  const onScheme = () => { if (currentLook.theme === 'system') applyLook(currentLook); };
+  if (mq.addEventListener) mq.addEventListener('change', onScheme);
+}
+
+// ---------- Acessibilidade: estado dos botões de seleção e nomes da grelha de posição ----------
+(function () {
+  const SEL = '.segmented button, .tab-bar button, .page-tab:not(.add), .pos-grid button, .swatch';
+  const sync = (el) => el.setAttribute('aria-pressed', el.classList.contains('active') ? 'true' : 'false');
+  const syncAll = (root) => root.querySelectorAll(SEL).forEach(sync);
+  syncAll(document);
+  const POS = { top:'Em cima', mid:'Ao meio', bottom:'Em baixo', left:'à esquerda', center:'ao centro', right:'à direita' };
+  document.querySelectorAll('#posGrid button').forEach((b) => {
+    const [v, h] = b.dataset.pos.split('-');
+    b.setAttribute('aria-label', POS[v] + ', ' + POS[h]);
+  });
+  if (!('MutationObserver' in window)) return;
+  new MutationObserver((records) => {
+    records.forEach((r) => {
+      if (r.type === 'attributes' && r.target.matches && r.target.matches(SEL)) sync(r.target);
+      if (r.type === 'childList') r.addedNodes.forEach((n) => { if (n.nodeType === 1) { if (n.matches(SEL)) sync(n); syncAll(n); } });
+    });
+  }).observe(document.body, { attributes:true, attributeFilter:['class'], childList:true, subtree:true });
+})();
+
+// ---------- Light Chase: a luz percorre o botão uma vez quando a exportação fica disponível ----------
+(function () {
+  const wrap = document.querySelector('.lw');
+  const btn = document.getElementById('exportBtn');
+  if (!wrap || !btn || !('MutationObserver' in window)) return;
+  // no fim, tira a classe: assim o hover seguinte volta a disparar a animação
+  wrap.addEventListener('animationend', () => wrap.classList.remove('chase-once'));
+  new MutationObserver(() => {
+    if (btn.disabled) return;
+    wrap.classList.remove('chase-once');
+    void wrap.offsetWidth;
+    wrap.classList.add('chase-once');
+  }).observe(btn, { attributes:true, attributeFilter:['disabled'] });
+})();
 </script>
 </body>
 </html>

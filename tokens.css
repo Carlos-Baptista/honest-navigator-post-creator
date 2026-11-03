@@ -1,0 +1,447 @@
+/* Cópia de tokens.css do design system v2.1. Sem os itálicos (a app não os usa). */
+/* ═══════════════════════════════════════════════════════════════
+   THE HONEST NAVIGATOR — tokens.css  v2.1
+   Fonte única dos tokens. A documentação, o Editor de Capas, a
+   landing e a web app importam este ficheiro em vez de copiar valores.
+
+   Regras do sistema (inalteradas)
+   · zero border-radius (excepto o pulse dot, que é um círculo)
+   · divisórias sempre 0.5px, nunca 1px
+   · brackets "[ Label ]" só em navegação, nunca em botões de acção
+
+   TEMAS
+   · Noite é o tema base (:root).
+   · Dia aplica-se quando o sistema pede tema claro, ou à força com
+     <html data-theme="day">. Para forçar a noite: data-theme="night".
+
+   FONTE DE TÍTULOS (trocável)
+   · Por defeito: Besley.
+   · Para usar a Newsreader: <html data-display="newsreader">.
+     Os tokens --display-* ajustam peso, tracking e tamanho óptico.
+
+   MUDANÇAS face à v1.3 (ler antes de actualizar outros projectos)
+   · --font-display        Awesome Serif → Besley (OFL, ver fonts/)
+   · --ring-offset         3px → 0   (anel colado; v1.3 desenhava duas molduras)
+   · --color-focus         âmbar → osso (noite) / tinta (dia)
+   · Botões: Registo (deslocamento + sombra dura) substitui o hover
+     por mudança de cor. Light Chase fica reservado a 1 botão principal.
+   · NOVO tema Dia, tokens --display-*, --reg-*, --chase-*
+   · v2.1: Película, a superfície com luz e grão (--film-*, --grain-*,
+     --gradient-film, --edge-light e o componente .film). Ver secção
+     PELÍCULA no fim do ficheiro.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Fontes (alojadas em ./fonts, subset latin) ──
+   Para outras línguas, acrescentar os ficheiros latin-ext do pacote
+   @fontsource-variable correspondente. Licenças em fonts/LICENSE-*.txt */
+@font-face {
+  font-family: "Besley";
+  src: url("fonts/besley-latin-wght-normal.woff2") format("woff2");
+  font-weight: 400 900; font-style: normal; font-display: swap;
+}
+/* Newsreader tem altura de maiúsculas menor (0.67 vs 0.75 do Besley):
+   size-adjust 112% iguala-as, para a troca não encolher os títulos. */
+@font-face {
+  font-family: "Newsreader";
+  src: url("fonts/newsreader-latin-opsz-normal.woff2") format("woff2");
+  font-weight: 200 800; font-style: normal; font-display: swap; size-adjust: 112%;
+}
+@font-face {
+  font-family: "Anybody";
+  src: url("fonts/anybody-latin-wdth-normal.woff2") format("woff2");
+  font-weight: 100 900; font-stretch: 50% 150%; font-style: normal; font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+
+  /* ═════════════ 1. PRIMITIVOS — rampas (100 claro → 800 escuro) ═════════════ */
+  --stone-800:  #1C1B17;
+  --stone-700:  #3A3530;
+  --stone-600:  #635850;
+  --stone-500:  #988A79;
+  --stone-400:  #A89880;
+  --stone-300:  #C4B49A;
+  --stone-200:  #D8CCBA;
+  --stone-100:  #EDE5D8;
+
+  --orange-800: #3C1A08;
+  --orange-700: #7A3010;
+  --orange-600: #AD4718;
+  --orange-500: #C8601A;
+  --orange-400: #D87030;
+  --orange-300: #E09070;
+  --orange-200: #EEB898;
+  --orange-100: #F5D8C0;
+
+  --amber-800:  #382E10;
+  --amber-700:  #685028;
+  --amber-600:  #9A7828;
+  --amber-500:  #C8A040;
+  --amber-400:  #D4B860;
+  --amber-300:  #E0CA88;
+  --amber-200:  #ECDCAC;
+  --amber-100:  #F5EDD0;
+
+  --sage-800:   #282C20;
+  --sage-700:   #404838;
+  --sage-600:   #5C6448;
+  --sage-500:   #7A8460;
+  --sage-400:   #909C78;
+  --sage-300:   #A8B490;
+  --sage-200:   #C4CEB0;
+  --sage-100:   #DDE4D0;
+
+  --forest-800: #101810;
+  --forest-700: #182018;
+  --forest-600: #1E2818;
+  --forest-500: #2C3C2C;
+  --forest-400: #405040;
+  --forest-300: #607060;
+  --forest-200: #8A9E8A;
+  --forest-100: #AABCAA;
+
+  --clay-500:   #CA756C;   /* erro, tema noite */
+
+  /* Primitivos do tema Dia (papel quente e tintas escurecidas) */
+  --paper-100:  #EFE9DD;
+  --paper-200:  #E6DFD1;
+  --umber-600:  #5F5448;   /* texto secundário, dia */
+  --umber-500:  #7A6E61;   /* bordas de controlo, dia */
+  --rust-600:   #A5410F;   /* laranja como texto, dia */
+  --moss-700:   #4F5F36;   /* sucesso, dia */
+  --brick-600:  #A8382E;   /* erro, dia */
+  --bronze-600: #7A5A10;   /* aviso, dia */
+
+  /* Película: verdes-escuros do fundo do cartão (de cima para baixo) */
+  --film-1: #233123;
+  --film-2: #1B261A;
+  --film-3: #141C13;
+
+  /* ═════════════ 2. SEMÂNTICOS — TEMA NOITE (base) ═════════════ */
+
+  /* Fundos */
+  --color-bg:          var(--stone-800);
+  --color-bg-surface:  #222018;
+  --color-forest:      var(--forest-600);
+
+  /* Texto — contrastes sobre bg / surface / forest
+     strong       13.79 / 13.05 / 12.25   AAA
+     base          8.49 /  8.03 /  7.54   AAA
+     mid           5.13 /  4.85 /  4.55   AA
+     orange-text   5.15 /  4.88 /  4.58   AA
+     sage          5.92 /  5.60 /  5.26   AA
+     amber         7.02 /  6.65 /  6.24   AAA
+     error         5.15 /  4.87 /  4.57   AA                                 */
+  --color-text-strong: var(--stone-100);
+  --color-text-base:   var(--stone-300);
+  --color-text-mid:    var(--stone-500);
+  --color-orange-text: var(--orange-400);
+  --color-sage:        var(--sage-400);
+  --color-amber:       var(--amber-500);
+
+  /* Laranja por função
+     orange        gráfico / decorativo / elementos não-textuais (≥3:1)
+     orange-text   texto sobre os fundos
+     orange-fill   fundo do botão primário
+     on-fill       etiqueta sobre orange-fill (4.55:1)                       */
+  --color-orange:      var(--orange-500);
+  --color-orange-fill: var(--orange-600);
+  --color-on-fill:     var(--stone-100);
+
+  /* Estados */
+  --color-error:       var(--clay-500);
+  --color-success:     var(--sage-400);
+  --color-warning:     var(--amber-500);
+
+  /* Foco: osso sobre tudo (13.79:1 sobre bg). Nunca se confunde com o
+     laranja de acção, que era o problema do âmbar da v1.3. */
+  --color-focus:       var(--stone-100);
+
+  /* Decorativo — NUNCA para texto (dim 2.20 · faint 1.42 · ghost 1.14) */
+  --color-dim:         #5A5048;
+  --color-faint:       var(--stone-700);
+  --color-ghost:       #2A2520;
+
+  /* Bordas
+     border / border-mid : divisórias (0.5px), decorativas
+     border-ui           : limites de controlo (1px), 3:1 mínimo
+                           3.50 / 3.31 / 3.11 sobre bg / surface / forest  */
+  --color-border:          rgba(200,186,168,0.08);
+  --color-border-mid:      rgba(200,186,168,0.14);
+  --color-border-ui:       #7C6E63;
+  --color-border-ui-hover: var(--stone-400);
+
+  /* Light Chase (reservado ao botão principal) */
+  --chase-stroke: var(--amber-500);
+  --chase-glow:
+    drop-shadow(0 0 1px rgba(242,229,200,1))
+    drop-shadow(0 0 4px rgba(200,160,64,0.85))
+    drop-shadow(0 0 10px rgba(200,96,26,0.25));
+  --chase-glow-primary:
+    drop-shadow(0 0 1.5px rgba(255,255,255,1))
+    drop-shadow(0 0 5px rgba(237,229,216,0.8))
+    drop-shadow(0 0 12px rgba(200,160,80,0.4));
+
+  /* Registo: sombra dura dos botões */
+  --reg-shadow-ghost:   var(--color-orange-text);
+  --reg-shadow-primary: var(--color-text-strong);
+
+  /* ═════════════ 2b. PELÍCULA — luz, grão e profundidade ═════════════
+     Regras: uma só fonte de luz por ecrã; o texto fica acima da zona de
+     luz (--film-zone); sem rosa-roxo; ícones em linha, sem emojis.
+     Contraste medido no pior pixel por baixo do texto: ver documentação. */
+  --film-zone: 9.5rem;     /* altura reservada à luz, sem texto */
+  --film-min:  27rem;
+  --grain-opacity: 0.6;
+  --grain-blend:   soft-light;
+  --grain-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.1 -.1'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>");
+  --film-burn:  radial-gradient(95% 58% at 88% 124%, rgba(244,158,76,.95) 0%, rgba(196,86,32,.60) 32%, rgba(122,48,16,.22) 58%, rgba(122,48,16,0) 78%);
+  --film-green: radial-gradient(80% 50% at 0% 112%, rgba(96,128,84,.60), rgba(96,128,84,0) 72%);
+  --film-base:  linear-gradient(200deg, var(--film-1) 0%, var(--film-2) 50%, var(--film-3) 100%);
+  --gradient-film: var(--film-burn), var(--film-green), var(--film-base);
+  --film-leak:  linear-gradient(90deg, rgba(255,200,120,0), rgba(255,190,110,.30), rgba(255,200,120,0));
+  --edge-light: inset 0 1px 0 rgba(237,229,216,0.12);   /* fio de luz no topo */
+
+  /* ═════════════ 3. TIPOGRAFIA ═════════════ */
+  --font-display: 'Besley', Georgia, serif;
+  --font-ui:      'Anybody', system-ui, sans-serif;
+
+  /* Ajustes por fonte de títulos (ver [data-display] mais abaixo) */
+  --display-weight:   500;
+  --display-tracking: -0.005em;
+  --display-leading:  1.1;
+
+  --weight-light:   300;
+  --weight-regular: 400;
+  --weight-medium:  500;
+
+  /* Escala. xs–md fixos; lg–3xl fluidos (rem + vw: respeitam o zoom).
+     375px → 24 / 32 / 44 / 56 px · ≥720px → 28 / 42 / 64 / 96 px */
+  --text-2xs:   10px;
+  --text-xs:    11px;
+  --text-sm:    12px;
+  --text-base:  14px;
+  --text-md:    18px;
+  --text-input: 16px;   /* mínimo para o iOS não fazer zoom ao focar */
+  --text-lg:    clamp(1.5rem,  1.2rem + 1.2vw, 1.75rem);
+  --text-xl:    clamp(2rem,    1.3rem + 2.9vw, 2.625rem);
+  --text-2xl:   clamp(2.75rem, 1.4rem + 5.8vw, 4rem);
+  --text-3xl:   clamp(3.5rem,  0.6rem + 12vw,  6rem);
+
+  --leading-tight:   1.1;
+  --leading-snug:    1.4;
+  --leading-normal:  1.7;
+  --leading-loose:   1.9;
+
+  --tracking-tight:   -0.01em;
+  --tracking-caption: 0.02em;
+  --tracking-wide:    0.06em;
+  --tracking-wider:   0.10em;
+  --tracking-widest:  0.14em;
+
+  /* ═════════════ 4. ESPAÇAMENTO E LAYOUT ═════════════ */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+  --space-9:  96px;
+
+  --container: 920px;
+  --gutter:    clamp(1.25rem, 0.5rem + 3.5vw, 3rem);
+  /* Breakpoint de referência (var() não funciona em @media): 720px */
+
+  --control-h:    40px;
+  --control-h-lg: 52px;
+  --target-min:   44px;   /* aplicado com (pointer: coarse) */
+
+  /* ═════════════ 5. BORDAS, FOCO, CAMADAS ═════════════ */
+  --border-hairline: 0.5px;
+  --border-ui:       1px;
+  --ring-width:      2px;
+  --ring-offset:     0px;   /* v1.3: 3px. Anel colado ao controlo */
+  --ring-offset-text: 2px;  /* para links sem borda */
+  --z-nav:           100;
+
+  /* ═════════════ 6. MOTION ═════════════ */
+  --duration-fast:  0.2s;
+  --duration-base:  0.35s;
+  --duration-slow:  0.5s;
+  --duration-reg:   0.14s;    /* Registo */
+  --duration-chase: 1.2s;
+  --duration-pulse: 2.4s;
+  --ease-standard:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:       cubic-bezier(0.2, 0.7, 0.2, 1);
+  --reg-offset:     3px;      /* deslocamento do Registo */
+
+  --glow-orange:
+    0 0 18px rgba(200,96,26,0.30),
+    0 0 36px rgba(200,96,26,0.10);
+}
+
+/* ═════════════ TEMA DIA ═════════════
+   Papel quente e tinta. Contrastes sobre bg / surface / forest:
+     strong       14.25 / 13.00 / 13.20   AAA
+     base         10.03 /  9.15 /  9.29   AAA
+     mid           6.10 /  5.56 /  5.65   AA
+     orange-text   5.17 /  4.71 /  4.78   AA
+     success       5.75 /  5.24 /  5.32   AA
+     error         5.31 /  4.84 /  4.92   AA
+     warning       5.27 /  4.80 /  4.88   AA
+     on-fill/fill  5.28:1 · fill/bg 4.71:1 · border-ui 4.11 / 3.74 · focus 14.25 */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="night"]) {
+    color-scheme: light;
+    --color-bg:          var(--paper-100);
+    --color-bg-surface:  var(--paper-200);
+    --color-forest:      var(--sage-100);
+    --color-text-strong: var(--stone-800);
+    --color-text-base:   var(--stone-700);
+    --color-text-mid:    var(--umber-600);
+    --color-orange-text: var(--rust-600);
+    --color-sage:        var(--moss-700);
+    --color-amber:       var(--bronze-600);
+    --color-orange:      var(--orange-500);   /* 3.38:1 sobre o papel */
+    --color-orange-fill: var(--orange-600);
+    --color-on-fill:     #FBF6EC;
+    --color-error:       var(--brick-600);
+    --color-success:     var(--moss-700);
+    --color-warning:     var(--bronze-600);
+    --color-focus:       var(--stone-800);
+    --color-dim:         #B9AE9C;
+    --color-faint:       #D3C9B8;
+    --color-ghost:       #E2DACB;
+    --color-border:          rgba(28,27,23,0.10);
+    --color-border-mid:      rgba(28,27,23,0.18);
+    --color-border-ui:       var(--umber-500);
+    --color-border-ui-hover: var(--stone-800);
+    --chase-stroke: var(--rust-600);
+    --chase-glow: drop-shadow(0 0 3px rgba(165,65,15,0.45));
+    --chase-glow-primary: drop-shadow(0 0 3px rgba(251,246,236,0.9)) drop-shadow(0 0 6px rgba(165,65,15,0.4));
+    --glow-orange: 0 0 18px rgba(165,65,15,0.18);
+  }
+}
+:root[data-theme="day"] {
+  color-scheme: light;
+  --color-bg:          var(--paper-100);
+  --color-bg-surface:  var(--paper-200);
+  --color-forest:      var(--sage-100);
+  --color-text-strong: var(--stone-800);
+  --color-text-base:   var(--stone-700);
+  --color-text-mid:    var(--umber-600);
+  --color-orange-text: var(--rust-600);
+  --color-sage:        var(--moss-700);
+  --color-amber:       var(--bronze-600);
+  --color-orange:      var(--orange-500);
+  --color-orange-fill: var(--orange-600);
+  --color-on-fill:     #FBF6EC;
+  --color-error:       var(--brick-600);
+  --color-success:     var(--moss-700);
+  --color-warning:     var(--bronze-600);
+  --color-focus:       var(--stone-800);
+  --color-dim:         #B9AE9C;
+  --color-faint:       #D3C9B8;
+  --color-ghost:       #E2DACB;
+  --color-border:          rgba(28,27,23,0.10);
+  --color-border-mid:      rgba(28,27,23,0.18);
+  --color-border-ui:       var(--umber-500);
+  --color-border-ui-hover: var(--stone-800);
+  --chase-stroke: var(--rust-600);
+  --chase-glow: drop-shadow(0 0 3px rgba(165,65,15,0.45));
+  --chase-glow-primary: drop-shadow(0 0 3px rgba(251,246,236,0.9)) drop-shadow(0 0 6px rgba(165,65,15,0.4));
+  --glow-orange: 0 0 18px rgba(165,65,15,0.18);
+}
+
+/* ═════════════ FONTE DE TÍTULOS ALTERNATIVA ═════════════
+   Newsreader: peso leve e tracking mais fechado. O eixo de tamanho óptico
+   (opsz) liga-se sozinho e suaviza os traços finos a tamanhos grandes. */
+:root[data-display="newsreader"] {
+  --font-display:     'Newsreader', Georgia, serif;
+  --display-weight:   300;
+  --display-tracking: -0.015em;
+  --display-leading:  1.1;
+}
+
+/* ═════════════ BASE — acessibilidade por defeito ═════════════ */
+
+/* Foco visível. Anel colado: uma só moldura. */
+:focus-visible {
+  outline: var(--ring-width) solid var(--color-focus);
+  outline-offset: var(--ring-offset);
+}
+a:not([class]):focus-visible,
+.link:focus-visible { outline-offset: var(--ring-offset-text); }
+
+/* Aplicação dos tokens de títulos */
+.f-display {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+  line-height: var(--display-leading);
+  font-optical-sizing: auto;
+}
+
+/* Movimento reduzido: tudo salta para o estado final. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ═════════════ PELÍCULA — componente ═════════════
+   Cartão principal com luz e grão. É sempre escuro, em qualquer tema:
+   redefine localmente os tokens de texto para os valores de Noite, por
+   isso o conteúdo (.btn, .f-display, etc.) mantém o contraste medido.
+   Uso: <div class="film"> título, texto, botões </div>
+   Um por ecrã. Texto sempre acima da zona de luz (padding-bottom). */
+.film {
+  --color-text-strong: var(--stone-100);
+  --color-text-base:   var(--stone-300);
+  --color-text-mid:    var(--stone-500);
+  --color-orange:      var(--orange-500);
+  --color-orange-text: var(--orange-400);
+  --color-orange-fill: var(--orange-600);
+  --color-on-fill:     var(--stone-100);
+  --color-border-ui:   #7C6E63;
+  --color-border-ui-hover: var(--stone-400);
+  --color-focus:       var(--stone-100);
+  --reg-shadow-ghost:   var(--orange-400);
+  --reg-shadow-primary: var(--stone-100);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  min-height: var(--film-min);
+  padding: var(--space-5) var(--space-5) var(--film-zone);
+  color: var(--color-text-base);
+  background: var(--gradient-film);
+  border: var(--border-hairline) solid rgba(200,186,168,0.18);
+  box-shadow: var(--edge-light);
+}
+.film::before {            /* fuga de luz no lado */
+  content: "";
+  position: absolute; z-index: 0; pointer-events: none;
+  right: -5%; top: 38%; width: 20%; height: 72%;
+  background: var(--film-leak);
+  filter: blur(16px);
+  transform: rotate(14deg);
+}
+.film::after {             /* grão */
+  content: "";
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: var(--grain-image);
+  background-size: 220px;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+}
+.film > * { position: relative; z-index: 1; }
