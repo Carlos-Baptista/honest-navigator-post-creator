@@ -31,6 +31,7 @@ if(a.display==='newsreader')r.setAttribute('data-display','newsreader');}catch(e
    so it stays legible whatever font the user picks. Each person's brand (BrandHeading/BrandBody,
    loaded by the script) only applies to the exported content and the preview. */
 /* Cores, tipografia, espaçamento, foco e movimento vêm de tokens.css (design system). */
+:root{ --color-placeholder: color-mix(in srgb, var(--color-text-mid) 92%, var(--color-bg)); }   /* ≥4,5:1 nos dois temas */
 *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
 button,input,textarea{ font-family:inherit; }
 
@@ -434,7 +435,7 @@ html,body{
   width:100%;
   min-width:0;
   background:transparent;
-  border:var(--border-ui) solid var(--color-border-ui);
+  border:var(--border-hairline) solid var(--color-border-ui);
   color:var(--color-text-strong);
   font-family:var(--font-ui);
   font-weight:300;
@@ -442,7 +443,7 @@ html,body{
   padding:9px 12px;
   border-radius:0;
 }
-.gf-row input::placeholder{ color:var(--color-text-mid); opacity:1; }
+.gf-row input::placeholder{ color:var(--color-placeholder); font-weight:200; opacity:1; }
 .gf-row input:focus{ outline:2px solid var(--color-focus); outline-offset:0; border-color:var(--color-focus); }
 .gf-row button{
   flex-shrink:0;
@@ -464,7 +465,7 @@ html,body{
 .field textarea{
   width:100%;
   background:transparent;
-  border:var(--border-ui) solid var(--color-border-ui);
+  border:var(--border-hairline) solid var(--color-border-ui);
   color:var(--color-text-strong);
   font-family:var(--font-ui);
   font-weight:300;
@@ -476,7 +477,7 @@ html,body{
   line-height:1.4;
 }
 .field input[type=text]::placeholder,
-.field textarea::placeholder{ color:var(--color-text-mid); opacity:1; }
+.field textarea::placeholder{ color:var(--color-placeholder); font-weight:200; opacity:1; }
 .field input[type=text]:focus,
 .field textarea:focus{ outline:2px solid var(--color-focus); outline-offset:0; border-color:var(--color-focus); }
 
