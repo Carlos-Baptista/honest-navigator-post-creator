@@ -443,7 +443,7 @@ html,body{
   padding:9px 12px;
   border-radius:0;
 }
-.gf-row input::placeholder{ color:var(--color-placeholder); font-weight:200; opacity:1; }
+.gf-row input::placeholder{ color:var(--color-placeholder); font-weight:200; font-size:var(--text-base); opacity:1; }   /* o campo mantém 16px (sem zoom no iOS); só o exemplo é mais pequeno */
 .gf-row input:focus{ outline:2px solid var(--color-focus); outline-offset:0; border-color:var(--color-focus); }
 .gf-row button{
   flex-shrink:0;
@@ -477,7 +477,7 @@ html,body{
   line-height:1.4;
 }
 .field input[type=text]::placeholder,
-.field textarea::placeholder{ color:var(--color-placeholder); font-weight:200; opacity:1; }
+.field textarea::placeholder{ color:var(--color-placeholder); font-weight:200; font-size:var(--text-base); opacity:1; }   /* o campo mantém 16px (sem zoom no iOS); só o exemplo é mais pequeno */
 .field input[type=text]:focus,
 .field textarea:focus{ outline:2px solid var(--color-focus); outline-offset:0; border-color:var(--color-focus); }
 
